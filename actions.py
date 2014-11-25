@@ -1,29 +1,46 @@
 import cocos
 
+PROGRAM_NAME= "Ice Blocks"
+FONT_NAME = 'Times New Roman'
+FONT_SIZE = 32
+WINDOW_WIDTH = 800
+WINDOW_HEIGHT = 600
+
 from cocos.actions import *
 
 class HelloActions(cocos.layer.ColorLayer):
+    is_event_handler = True
+    
     def __init__(self):
+        self.keys_pressed = set()
         super(HelloActions, self).__init__(64, 64, 224, 255)
-        label = cocos.text.Label('Hello, World!',
-                                 font_name='Times New Roman',
-                                 font_size=32,
+        label = cocos.text.Label(PROGRAM_NAME,
+                                 font_name= FONT_NAME,
+                                 font_size=FONT_SIZE,
                                  anchor_x='center',
                                  anchor_y='center')
-        label.position = 320, 240
+        label.position = WINDOW_WIDTH / 2, WINDOW_HEIGHT / 2
         self.add(label)
 
-        sprite = cocos.sprite.Sprite('grossini.png')
-        sprite.position = 320, 240
-        sprite.scale = 3
-        self.add(sprite, z=1)
+        self.sprite = cocos.sprite.Sprite('peddle.png')
+        self.sprite.position =  WINDOW_WIDTH / 2, WINDOW_HEIGHT / self.sprite.height
+        self.sprite.scale = 3
+        self.add(self.sprite, z=1)
 
         scale = ScaleBy(3, duration=2)
 
         label.do(Repeat(scale + Reverse(scale)))
-        sprite.do(Repeat(Reverse(scale) + scale))
+        # sprite.do(Repeat(Reverse(scale) + scale))
+    def on_key_press(self, key, modifiers):
+        """This function is called when a key is pressed.
+        'key' is a constant indicating which key was pressed.
+    'modifiers' is a bitwise or of several constants indicating which
+        modifiers are active at the time of the press (ctrl, shift, capslock, etc.)
+    """
+        move = MoveBy((80, 0), duration=1)
+        self.sprite.do(move)
 
-cocos.director.director.init()
+cocos.director.director.init(width = WINDOW_WIDTH, height = WINDOW_HEIGHT)
 hello_layer = HelloActions()
 
 def Blink(times, duration):
