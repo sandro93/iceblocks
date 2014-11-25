@@ -1,4 +1,4 @@
 iceblocks
 =========
 
-A simple breakout game using Pygame
+A simple breakout game using cocos2d 
