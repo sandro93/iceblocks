@@ -1,3 +1,5 @@
+#!/bin/env python3
+
 import cocos
 import configparser
 import pyglet
@@ -86,7 +88,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.add(label)
 
         self.sprite = cocos.sprite.Sprite(pyglet.resource.image('peddle.png'))
-        self.sprite.position =  WINDOW_W / 2, WINDOW_H / self.sprite.height
+        self.sprite.position =  WINDOW_W / 2, WINDOW_H / 2
         self.sprite.scale = 3
         self.add(self.sprite, z=1)
 
