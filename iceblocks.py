@@ -79,23 +79,18 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.keys_pressed[KEY_LEFT] = False
         self.keys_pressed[KEY_RIGHT] = False
         self.schedule(self.update)
-        label = cocos.text.Label(PROGRAM_NAME,
+        '''
+        = cocos.text.Label(PROGRAM_NAME,
                                  font_name=FONT_NAME,
                                  font_size=FONT_SIZE,
                                  anchor_x='center',
                                  anchor_y='center')
-        label.position = WINDOW_W / 2, WINDOW_H / 2
-        self.add(label)
-
+                                 '''
         self.sprite = cocos.sprite.Sprite(pyglet.resource.image('peddle.png'))
-        self.sprite.position =  WINDOW_W / 2, WINDOW_H / 2
+        self.sprite.position =  WINDOW_W / 2, self.sprite.height
         self.sprite.scale = 2
         self.add(self.sprite, z=1)
-
         scale = ScaleBy(3, duration=1)
-
-        label.do(Repeat(scale))
-        # sprite.do(Repeat(Reverse(scale) + scale))
     def update(self, dt):
         if self.keys_pressed[KEY_LEFT]:
             move = MoveBy((-80, 0), duration=0.2)
