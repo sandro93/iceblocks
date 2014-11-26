@@ -24,4 +24,4 @@ KEY_LEFT = config.get('bindings', 'key.LEFT')
 KEY_RIGHT = config.get('bindings', 'key.RIGHT')
 
 # World
-BALL_SPEED = config.get('world', 'ballspeed')
+BALL_SPEED = config.getint('world', 'ballspeed')

@@ -36,6 +36,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.add(self.ball, z=1)
     def update(self, dt):
         self.peddle.update(self.keys_pressed)
+        self.ball.update(self.keys_pressed, self.peddle)
 
     def on_key_press(self, key, modifiers):
         """This function is called when a key is pressed.
