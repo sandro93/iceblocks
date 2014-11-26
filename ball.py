@@ -33,6 +33,9 @@ class Ball(cocos.sprite.Sprite):
                 self.dy = -1 * self.dy
             else:
                 newPos = WINDOW_W / 2, WINDOW_H / 2
+                x, y = newPos
+                self.position = newPos
+                self.dy = -1 * self.dy
                 # self.remove_action(self.mv)
                 #self.do(MoveTo((WINDOW_W / 2, WINDOW_H / 2), duration = 0.2))
         
