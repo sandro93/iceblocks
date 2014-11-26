@@ -8,9 +8,10 @@ import pprint
 import message
 from peddle import Peddle
 from ball import Ball
+from block import Block
 from consts import *
 from cocos.actions import *
-
+from icefactory import BlockFactory
 # world to view scales
 scale_x = config.getint("window", "width")/config.getint("world", "width")
 scale_y = config.getint("window", "height")/config.getint("world", "height")
@@ -32,8 +33,12 @@ class IceBlocks(cocos.layer.ColorLayer):
                                  '''
         self.peddle = Peddle()
         self.ball = Ball()
+        self.blocks = BlockFactory().level0.blocks
+        for block in self.blocks:
+            self.add(block, z=1)
         self.add(self.peddle, z=1)
         self.add(self.ball, z=1)
+
     def update(self, dt):
         self.peddle.update(self.keys_pressed)
         self.ball.update(self.keys_pressed, self.peddle)
