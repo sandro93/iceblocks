@@ -18,10 +18,12 @@ scale_y = config.getint("window", "height")/config.getint("world", "height")
 class IceBlocks(cocos.layer.ColorLayer):
     is_event_handler = True
     keys_pressed = {}
+    
     def __init__(self):
         super(IceBlocks, self).__init__(64, 64, 224, 255)
-        self.keys_pressed[KEY_LEFT] = False
-        self.keys_pressed[KEY_RIGHT] = False
+        self.keys_pressed = []
+        #self.keys_pressed[KEY_LEFT] = False
+        #self.keys_pressed[KEY_RIGHT] = False
         self.schedule(self.update)
         '''
         = cocos.text.Label(PROGRAM_NAME,
@@ -36,7 +38,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.add(self.ball, z=1)
     def update(self, dt):
         self.peddle.update(self.keys_pressed)
-        self.ball.update(self.keys_pressed, self.peddle)
+        self.ball.update(self.peddle)
 
     def on_key_press(self, key, modifiers):
         """This function is called when a key is pressed.
@@ -44,16 +46,22 @@ class IceBlocks(cocos.layer.ColorLayer):
         'modifiers' is a bitwise or of several constants indicating which
         modifiers are active at the time of the press (ctrl, shift, capslock, etc.)
         """
-        if key == pyglet.window.key.LEFT:
-            self.keys_pressed[KEY_LEFT] = True
-
-        if key == pyglet.window.key.RIGHT:
-            self.keys_pressed[KEY_RIGHT] = True
+        if key in (pyglet.window.key.LEFT, pyglet.window.key.RIGHT):
+            self.keys_pressed.append(key)
+            
+        #print(modifiers)
+        #help(cocos.layer.Layer)
+        #if key == pyglet.window.key.LEFT and self.keys_pressed[KEY_RIGHT] == False:
+            #self.keys_pressed[KEY_LEFT] = True
+        #elif key == pyglet.window.key.RIGHT and self.keys_pressed[KEY_LEFT] == False:
+            #self.keys_pressed[KEY_RIGHT] = True
 
         return False
     def on_key_release(self, key, modifiers):
-        self.keys_pressed[KEY_LEFT] = False
-        self.keys_pressed[KEY_RIGHT] = False
+        if key in (pyglet.window.key.LEFT, pyglet.window.key.RIGHT):
+            self.keys_pressed.remove(key)
+        #self.keys_pressed[KEY_LEFT] = False
+        #self.keys_pressed[KEY_RIGHT] = False
         
         
 cocos.director.director.init(vsync = True, resizable = True, width=WINDOW_W, height=WINDOW_H)
