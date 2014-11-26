@@ -7,6 +7,7 @@ from peddle import Peddle
 
 class Ball(cocos.sprite.Sprite):
     dx = dy = BALL_SPEED
+    pos_x = 0
     def __init__(self, img='ball.png',
                  x = None,
                  y = None,
@@ -18,16 +19,16 @@ class Ball(cocos.sprite.Sprite):
             y = WINDOW_H / 2
         self.position = x, y    
         self.dx = self.dy = BALL_SPEED
+        self.pos_x = self.position[0] - self.width/ 2
     
         
     def update(self, keys_pressed, peddle):
-        x, y = self.position
+        x, y = self.pos_x, self.position[1]
         peddle_x, peddle_y = peddle.pos_x, peddle.position[1]
         if x > WINDOW_W or x < 0:
             self.dx = -1 * self.dx
         if y >= WINDOW_H:
             self.dy = -1 * self.dy
-            
         if y < peddle.height:
             if x >= peddle_x and x <= (peddle_x + peddle.width):
                 self.dy = -1 * self.dy
