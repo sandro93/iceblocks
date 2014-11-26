@@ -5,8 +5,7 @@ from consts import *
 
 class Peddle(cocos.sprite.Sprite):
     palette = {}
-    self.pos_x = 0
-    
+       
     def __init__(self, img='peddle.png',
                  x = None,
                  y = None,
