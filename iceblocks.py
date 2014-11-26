@@ -1,5 +1,7 @@
 import cocos
 import configparser
+import pyglet
+import pprint
 
 config = configparser.ConfigParser()
 config.sections()
@@ -18,6 +20,7 @@ RESIZABLE = config.getboolean('window', 'resizable')
 # Bindings
 KEY_LEFT = config.get('bindings', 'key.LEFT')
 KEY_RIGHT = config.get('bindings', 'key.RIGHT')
+
 from cocos.actions import *
 
 # world to view scales
@@ -68,8 +71,12 @@ class MessageLayer( cocos.layer.Layer ):
 class IceBlocks(cocos.layer.ColorLayer):
     is_event_handler = True
     def __init__(self):
-        self.keys_pressed = {}
         super(IceBlocks, self).__init__(64, 64, 224, 255)
+        self.bindings = config['bindings']
+        self.keys_pressed = {}
+        self.keys_pressed[KEY_LEFT] = False
+        self.keys_pressed[KEY_RIGHT] = False
+        self.schedule(self.update)
         label = cocos.text.Label(PROGRAM_NAME,
                                  font_name=FONT_NAME,
                                  font_size=FONT_SIZE,
@@ -78,7 +85,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         label.position = WINDOW_W / 2, WINDOW_H / 2
         self.add(label)
 
-        self.sprite = cocos.sprite.Sprite('peddle.png')
+        self.sprite = cocos.sprite.Sprite(pyglet.resource.image('peddle.png'))
         self.sprite.position =  WINDOW_W / 2, WINDOW_H / self.sprite.height
         self.sprite.scale = 3
         self.add(self.sprite, z=1)
@@ -87,15 +94,31 @@ class IceBlocks(cocos.layer.ColorLayer):
 
         label.do(Repeat(scale + Reverse(scale)))
         # sprite.do(Repeat(Reverse(scale) + scale))
+    def update(self, dt):
+        if self.keys_pressed[KEY_LEFT]:
+            move = MoveBy((-80, 0), duration=0.2)
+            self.sprite.do(move)
+        if self.keys_pressed[KEY_RIGHT]:
+            move = MoveBy((80, 0), duration=0.2)
+            self.sprite.do(move)        
+
     def on_key_press(self, key, modifiers):
         """This function is called when a key is pressed.
         'key' is a constant indicating which key was pressed.
         'modifiers' is a bitwise or of several constants indicating which
         modifiers are active at the time of the press (ctrl, shift, capslock, etc.)
-    """
-        move = MoveBy((80, 0), duration=0.2)
-        self.sprite.do(move)
-
+        """
+        if key == pyglet.window.key.LEFT:
+            self.keys_pressed[KEY_LEFT] = True
+            return True
+        if key == pyglet.window.key.RIGHT:
+            self.keys_pressed[KEY_RIGHT] = True
+            return True
+        return False
+    def on_key_release(self, key, modifiers):
+        self.keys_pressed[KEY_LEFT] = False
+        self.keys_pressed[KEY_RIGHT] = False
+        
 cocos.director.director.init(vsync = True, resizable = True, width=WINDOW_W, height=WINDOW_H)
 hello_layer = IceBlocks()
 
