@@ -6,7 +6,8 @@ import configparser
 import pyglet
 import pprint
 import message
-import peddle
+from peddle import Peddle
+from ball import Ball
 from consts import *
 from cocos.actions import *
 
@@ -16,8 +17,11 @@ scale_y = config.getint("window", "height")/config.getint("world", "height")
 
 class IceBlocks(cocos.layer.ColorLayer):
     is_event_handler = True
+    keys_pressed = {}
     def __init__(self):
         super(IceBlocks, self).__init__(64, 64, 224, 255)
+        self.keys_pressed[KEY_LEFT] = False
+        self.keys_pressed[KEY_RIGHT] = False
         self.schedule(self.update)
         '''
         = cocos.text.Label(PROGRAM_NAME,
@@ -26,41 +30,33 @@ class IceBlocks(cocos.layer.ColorLayer):
                                  anchor_x='center',
                                  anchor_y='center')
                                  '''
-        self.peddle = peddle.Peddle()
+        self.peddle = Peddle()
+        self.ball = Ball()
         self.add(self.peddle, z=1)
+        self.add(self.ball, z=1)
     def update(self, dt):
-        pass
+        self.peddle.update(self.keys_pressed)
+
     def on_key_press(self, key, modifiers):
         """This function is called when a key is pressed.
         'key' is a constant indicating which key was pressed.
         'modifiers' is a bitwise or of several constants indicating which
         modifiers are active at the time of the press (ctrl, shift, capslock, etc.)
         """
-        keys_pressed = {}
-        keys_pressed[KEY_LEFT] = False
-        keys_pressed[KEY_RIGHT] = False
         if key == pyglet.window.key.LEFT:
-            keys_pressed[KEY_LEFT] = True
+            self.keys_pressed[KEY_LEFT] = True
 
         if key == pyglet.window.key.RIGHT:
-            keys_pressed[KEY_RIGHT] = True
-        self.peddle.update(keys_pressed)
+            self.keys_pressed[KEY_RIGHT] = True
+
         return False
     def on_key_release(self, key, modifiers):
-        keys_pressed = {}
-        keys_pressed[KEY_LEFT] = False
-        keys_pressed[KEY_RIGHT] = False
-        self.peddle.update(keys_pressed)
+        self.keys_pressed[KEY_LEFT] = False
+        self.keys_pressed[KEY_RIGHT] = False
+        
         
 cocos.director.director.init(vsync = True, resizable = True, width=WINDOW_W, height=WINDOW_H)
 hello_layer = IceBlocks()
-
-def Blink(times, duration):
-    return (
-        Hide() + Delay(duration/(times*2)) +
-        Show() + Delay(duration/(times*2))
-    ) * times
-
 
 # hello_layer.do(RotateBy(360, duration=10))
 # hello_layer.do( Twirl( grid=(16,12), duration=4) )
