@@ -26,7 +26,7 @@ class IceBlocks(cocos.layer.ColorLayer):
                                  anchor_x='center',
                                  anchor_y='center')
                                  '''
-        self.peddle = peddle.Peddle(pyglet.resource.image('peddle.png'))
+        self.peddle = peddle.Peddle()
         self.add(self.peddle, z=1)
     def update(self, dt):
         pass
