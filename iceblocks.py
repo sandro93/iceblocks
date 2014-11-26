@@ -90,7 +90,7 @@ class IceBlocks(cocos.layer.ColorLayer):
     def on_key_press(self, key, modifiers):
         """This function is called when a key is pressed.
         'key' is a constant indicating which key was pressed.
-    'modifiers' is a bitwise or of several constants indicating which
+        'modifiers' is a bitwise or of several constants indicating which
         modifiers are active at the time of the press (ctrl, shift, capslock, etc.)
     """
         move = MoveBy((80, 0), duration=0.2)
