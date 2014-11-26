@@ -22,14 +22,14 @@ class Ball(cocos.sprite.Sprite):
         
     def update(self, keys_pressed, peddle):
         x, y = self.position
-        peddle_x, peddle_y = peddle.position
+        peddle_x, peddle_y = peddle.pos_x, peddle.position[1]
         if x > WINDOW_W or x < 0:
             self.dx = -1 * self.dx
         if y >= WINDOW_H:
             self.dy = -1 * self.dy
             
         if y < peddle.height:
-            if x >= peddle_x and (x + self.width) <= (peddle_x + peddle.width):
+            if x >= peddle_x and x <= (peddle_x + peddle.width):
                 self.dy = -1 * self.dy
             else:
                 newPos = WINDOW_W / 2, WINDOW_H / 2

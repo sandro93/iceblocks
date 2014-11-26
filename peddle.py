@@ -15,6 +15,8 @@ class Peddle(cocos.sprite.Sprite):
         if y is None :
             y = self.height / 2
         self.position = x, y    
+        self.pos_x = self.position[0] - self.width/ 2
+        # self.pos_y = self.position[1] / 2
     
         
     def update(self, keys_pressed):
