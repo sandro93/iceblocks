@@ -5,6 +5,8 @@ from consts import *
 
 class Peddle(cocos.sprite.Sprite):
     palette = {}
+    self.pos_x = 0
+    
     def __init__(self, img='peddle.png',
                  x = None,
                  y = None,
@@ -15,7 +17,7 @@ class Peddle(cocos.sprite.Sprite):
         if y is None :
             y = self.height / 2
         self.position = x, y    
-        self.pos_x = self.position[0] - self.width/ 2
+        self.pos_x = self.position[0] - self.width / 2
         # self.pos_y = self.position[1] / 2
     
         
