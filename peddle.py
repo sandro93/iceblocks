@@ -12,18 +12,16 @@ class Peddle(cocos.sprite.Sprite):
                  x = None,
                  y = None,
                  vel=None):
-        super(Peddle, self).__init__(img)
+        super(Peddle, self).__init__(img, anchor=(0, 0))
         if x is None :
             x = WINDOW_W / 2
         if y is None :
             y = self.height / 2
-        self.position = x, y
-        self.peddle_rect = self.get_rect()
+        self.position = x, 0        
         self.paddle_step = self.width / 4
 
-    def update(self, keys_pressed):
-        self.peddle_rect = self.get_rect()
-        rect_x, rect_y = math.ceil(self.peddle_rect.position[0]), 0
+    def update(self, keys_pressed):        
+        rect_x, rect_y = math.ceil(self.position[0]), 0
         if len(keys_pressed) > 0:
             if  keys_pressed[0] == pyglet.window.key.LEFT:
                 if rect_x >= 0 :
