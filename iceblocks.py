@@ -70,12 +70,12 @@ class IceBlocks(cocos.layer.ColorLayer):
         
         
 cocos.director.director.init(vsync = True, resizable = True, width=WINDOW_W, height=WINDOW_H)
-hello_layer = IceBlocks()
+game_layer = IceBlocks()
 
-# hello_layer.do(RotateBy(360, duration=10))
-# hello_layer.do( Twirl( grid=(16,12), duration=4) )
-# hello_layer.do( Lens3D( grid=(32,24), duration=5 ))
-# hello_layer.do(Blink(2, 2))
-main_scene = cocos.scene.Scene(hello_layer)
+# game_layer.do(RotateBy(360, duration=10))
+# game_layer.do( Twirl( grid=(16,12), duration=4) )
+# game_layer.do( Lens3D( grid=(32,24), duration=5 ))
+# game_layer.do(Blink(2, 2))
+main_scene = cocos.scene.Scene(game_layer)
 if __name__ == '__main__':
     cocos.director.director.run(main_scene)
