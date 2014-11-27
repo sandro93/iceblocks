@@ -26,17 +26,14 @@ class Ball(cocos.sprite.Sprite):
         center_x = self.position[0]
         peddle_rect = peddle.get_rect()
 
-        peddle_x = math.ceil(peddle_rect.position[0]),
-        math.ceil(peddle.height)
+        peddle_x, peddle_y = math.ceil(peddle_rect.position[0]), math.ceil(peddle.height)
 
         if x + self.width > WINDOW_W or x < 0:
             self.dx = -1 * self.dx
         if y + self.height >= WINDOW_H:
             self.dy = -1 * self.dy
         if y == peddle.height:
-            if (math.ceil(x) >= peddle_x and math.ceil(x) <= (peddle_x +
-               peddle.width)) or (x + self.width >= peddle_x and x <=
-               (peddle_x + peddle.width)):
+            if (math.ceil(x) >= peddle_x and math.ceil(x) <= (peddle_x + peddle.width)) or (x + self.width >= peddle_x and x <= (peddle_x + peddle.width)):
                 self.dy = -1 * self.dy
                 self.dx = (center_x - peddle.position[0]) / 7
             else:
