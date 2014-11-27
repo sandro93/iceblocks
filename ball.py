@@ -2,6 +2,7 @@ import cocos
 import math
 import time
 from consts import BALL_SPEED, WINDOW_W, WINDOW_H
+from cocos import collision_model as cm, euclid as eu
 
 
 class Ball(cocos.sprite.Sprite):
@@ -19,10 +20,10 @@ class Ball(cocos.sprite.Sprite):
             y = WINDOW_H / 2
         self.position = x, y
         self.dx = self.dy = BALL_SPEED
-        self.ball_rect = self.get_rect()
+        self.cshape = cm.AARectShape(eu.Vector2(x, y), self.width / 2, self.height / 2)
 
     def update(self, peddle):
-        x, y = self.ball_rect.position[0], self.ball_rect.position[1]
+        x, y = self.cshape.center[0], self.cshape.center[1]
         center_x = self.position[0]
         peddle_rect = peddle.get_rect()
 
@@ -38,13 +39,17 @@ class Ball(cocos.sprite.Sprite):
                 self.dx = (center_x - peddle.position[0]) / 7
             else:
                 newPos = peddle.position[0], peddle.height
-                self.ball_rect.position = newPos
-                self.position = self.ball_rect.center
+                self.update_position(newPos)
                 self.dy = -1 * self.dy
-                x = math.ceil(self.ball_rect.position[0])
-                y = math.ceil(self.ball_rect.position[1])
+                x = math.ceil(self.cshape.center[0])
+                y = math.ceil(self.cshape.center[1])
                 time.sleep(1.0)
 
         newPos = x + self.dx, y + self.dy
-        self.ball_rect.position = newPos
-        self.position = self.ball_rect.center
+        self.update_position(newPos)
+
+    def update_position(self, new_position):
+        self.position = new_position
+        self.cshape.center = new_position
+
+

@@ -28,7 +28,7 @@ class BlockFactory:
         voffset = 40
 
         rows = []
-        blockNums = (14, 9, 8, 9, 10)
+        blockNums = (10, 9, 8, 9, 10)
         i = 1
         for n in blockNums:
             startpos = ((WINDOW_W - n * blockw) / 2, WINDOW_H - i * voffset)

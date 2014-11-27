@@ -6,6 +6,9 @@ from peddle import Peddle
 from ball import Ball
 from consts import config, WINDOW_W, WINDOW_H
 from icefactory import BlockFactory
+from cocos import collision_model as cm
+from actions import Blink
+
 # world to view scales
 scale_x = WINDOW_W / config.getint("world", "width")
 scale_y = WINDOW_H / config.getint("world", "height")
@@ -33,10 +36,18 @@ class IceBlocks(cocos.layer.ColorLayer):
             self.add(block, z=1)
         self.add(self.peddle, z=1)
         self.add(self.ball, z=1)
+        self.collman = cm.CollisionManagerBruteForce()
 
     def update(self, dt):
         self.peddle.update(self.keys_pressed)
         self.ball.update(self.peddle)
+        self.collman.clear()
+        for z, node in self.children:
+            if not isinstance(node, Peddle):
+                self.collman.add(node)
+        self.collman.add(self.ball)
+        for obj in self.collman.objs_colliding(self.ball):
+            self.remove(obj)
 
     def on_key_press(self, key, modifiers):
         """This function is called when a key is pressed.
