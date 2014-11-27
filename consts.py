@@ -1,14 +1,12 @@
 import configparser
 
-PROGRAM_NAME= "Ice Blocks"
+PROGRAM_NAME = "Ice Blocks"
 
 conffile = 'iceblocks.conf'
 
 config = configparser.ConfigParser()
 config.sections()
 config.read(conffile)
-
-
 
 # View
 FONT_NAME = config.get('view', 'font_name')

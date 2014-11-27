@@ -6,8 +6,8 @@ from consts import *
 
 class Peddle(cocos.sprite.Sprite):
     palette = {}
-     
-       
+
+
     def __init__(self, img='peddle.png',
                  x = None,
                  y = None,
@@ -18,15 +18,15 @@ class Peddle(cocos.sprite.Sprite):
         if y is None :
             y = self.height / 2
         self.position = x, y
-        self.peddle_rect = self.get_rect()        
+        self.peddle_rect = self.get_rect()
         self.paddle_step = self.width / 4
-        
+
     def update(self, keys_pressed):
         self.peddle_rect = self.get_rect()
         rect_x, rect_y = math.ceil(self.peddle_rect.position[0]), 0
         if len(keys_pressed) > 0:
-            if  keys_pressed[0] == pyglet.window.key.LEFT:            
-                if rect_x >= 0 :                
+            if  keys_pressed[0] == pyglet.window.key.LEFT:
+                if rect_x >= 0 :
                     if rect_x > self.paddle_step :
                         dpos = self.paddle_step
                     else :
@@ -38,6 +38,6 @@ class Peddle(cocos.sprite.Sprite):
                     if WINDOW_W - (rect_x + self.width) > self.paddle_step :
                         dpos = self.paddle_step
                     else :
-                        dpos = WINDOW_W - (rect_x + self.width)                
+                        dpos = WINDOW_W - (rect_x + self.width)
                     move = MoveBy((dpos, 0), duration=0.05)
-                    self.do(move)        
+                    self.do(move)

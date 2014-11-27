@@ -3,7 +3,6 @@ import cocos
 class MessageLayer( cocos.layer.Layer ):
     """Transitory messages over worldview
 
-    
     Full display cycle for transitory messages, with effects and
     optional callback after hiding the message.
     """
@@ -22,9 +21,9 @@ class MessageLayer( cocos.layer.Layer ):
 
         actions = (
             cocos.actions.Show() + cocos.actions.Accelerate(
-                cocos.actions.MoveBy( (0,-h/2.0), duration=0.5)) + 
-            cocos.actions.Delay(1) +  
-            cocos.actions.Accelerate(cocos.actions.MoveBy( (0,-h/2.0), duration=0.5)) + 
+                cocos.actions.MoveBy( (0,-h/2.0), duration=0.5)) +
+            cocos.actions.Delay(1) +
+            cocos.actions.Accelerate(cocos.actions.MoveBy( (0,-h/2.0), duration=0.5)) +
             cocos.actions.Hide()
             )
 
