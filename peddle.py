@@ -1,10 +1,12 @@
 import cocos
 import pyglet
+import math
 from cocos.actions import *
 from consts import *
 
 class Peddle(cocos.sprite.Sprite):
     palette = {}
+     
        
     def __init__(self, img='peddle.png',
                  x = None,
@@ -15,25 +17,27 @@ class Peddle(cocos.sprite.Sprite):
             x = WINDOW_W / 2
         if y is None :
             y = self.height / 2
-        self.position = x, y    
-        self.pos_x = self.position[0] - self.width / 2
-        # self.pos_y = self.position[1] / 2
-    
+        self.position = x, y
+        self.peddle_rect = self.get_rect()        
+        self.paddle_step = self.width / 4
         
     def update(self, keys_pressed):
-        if keys_pressed[KEY_LEFT]:            
-            if self.x - (self.width / 2) >= 0 :
-                if self.x - (self.width / 2) > self.width / 2 :
-                    dpos = self.width / 2
-                else :
-                    dpos = self.x - (self.width / 2)
-            move = MoveBy((-dpos, 0), duration=0.07)
-            self.do(move)
-        elif keys_pressed[KEY_RIGHT]:
-            if (self.x + (self.width / 2)) < WINDOW_W :
-                if WINDOW_W - (self.x + (self.width / 2)) > self.width / 2 :
-                    dpos = self.width / 2
-                else :
-                    dpos = WINDOW_W - (self.x + (self.width / 2))                
-                move = MoveBy((dpos, 0), duration=0.07)
-                self.do(move)        
+        self.peddle_rect = self.get_rect()
+        rect_x, rect_y = math.ceil(self.peddle_rect.position[0]), 0
+        if len(keys_pressed) > 0:
+            if  keys_pressed[0] == pyglet.window.key.LEFT:            
+                if rect_x >= 0 :                
+                    if rect_x > self.paddle_step :
+                        dpos = self.paddle_step
+                    else :
+                        dpos = rect_x
+                move = MoveBy((-dpos, 0), duration=0.05)
+                self.do(move)
+            elif keys_pressed[0] == pyglet.window.key.RIGHT:
+                if rect_x + self.width < WINDOW_W :
+                    if WINDOW_W - (rect_x + self.width) > self.paddle_step :
+                        dpos = self.paddle_step
+                    else :
+                        dpos = WINDOW_W - (rect_x + self.width)                
+                    move = MoveBy((dpos, 0), duration=0.05)
+                    self.do(move)        
