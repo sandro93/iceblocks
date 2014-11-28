@@ -5,7 +5,7 @@ import pyglet
 from peddle import Peddle
 from ball import Ball
 from consts import config, WINDOW_W, WINDOW_H, LIVES
-from icefactory import BlockFactory
+from icefactory import BlockFactory, Level
 from cocos import collision_model as cm
 from actions import Blink
 from block import Block
@@ -16,6 +16,7 @@ scale_x = WINDOW_W / config.getint("world", "width")
 scale_y = WINDOW_H / config.getint("world", "height")
 
 
+
 class IceBlocks(cocos.layer.ColorLayer):
     is_event_handler = True
     keys_pressed = {}
@@ -24,13 +25,14 @@ class IceBlocks(cocos.layer.ColorLayer):
         super(IceBlocks, self).__init__(64, 64, 224, 255)
         self.keys_pressed = []
         self.current_lives = LIVES
+        self.level = Level(1)
         self.schedule(self.update)
 
         self.peddle = Peddle()
-        self.ball = Ball()
-        self.draw_blocks()
+        self.ball = Ball()        
         self.add(self.peddle, z=1)
         self.add(self.ball, z=1)
+        self.draw_blocks()
         self.collman = cm.CollisionManagerBruteForce()
         self.draw_lives()
 
@@ -41,6 +43,9 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.draw_lives()
         self.resume_scheduler()
 
+    def level_up(self):
+        self.level = Level(2)
+    
     def update(self, dt):
         if self.current_lives > -1:
             self.peddle.update(self.keys_pressed)
@@ -52,8 +57,11 @@ class IceBlocks(cocos.layer.ColorLayer):
             for z, node in self.children:
                 if isinstance(node, Block):
                     self.collman.add(node)
-            for obj in self.collman.objs_colliding(self.ball):
-                self.remove(obj)
+            if len(self.collman):                
+                for obj in self.collman.objs_colliding(self.ball):
+                    self.remove(obj)
+            else :
+                self.level_up()
         else:
             self.pause_scheduler()
             self.message = MessageLayer()
@@ -69,7 +77,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         for z, node in self.children:
             if isinstance(node, Block):
                 self.remove(node)
-        self.blocks = BlockFactory().level0.blocks
+        self.blocks = BlockFactory().get_level(0)
         for block in self.blocks:
             self.add(block, z=1)
     
