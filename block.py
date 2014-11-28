@@ -13,5 +13,3 @@ class Block(cocos.sprite.Sprite):
             self.width / 2,
             self.height / 2
         )
-        pprint.pprint(self.position)
-        pprint.pprint(self.cshape.center)
