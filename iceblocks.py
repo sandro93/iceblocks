@@ -35,17 +35,6 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.collman = cm.CollisionManagerBruteForce()
         self.draw_lives()
 
-    def update(self, dt):
-        self.peddle.update(self.keys_pressed)
-        self.ball.update(self.peddle)
-        self.collman.clear()
-        for z, node in self.children:
-            if not isinstance(node, Peddle):
-                self.collman.add(node)
-        self.collman.add(self.ball)
-        for obj in self.collman.objs_colliding(self.ball):
-            self.remove(obj)
-
     def restart_game(self):
         self.remove(self.message)
         self.current_lives = LIVES
@@ -59,6 +48,16 @@ class IceBlocks(cocos.layer.ColorLayer):
             if result == -1 :
                 self.current_lives -= 1
             self.update_lives()
+            self.collman.clear()
+            for z, node in self.children:
+                if not isinstance(node, Peddle):
+                    self.collman.add(node)
+            self.collman.add(self.ball)
+            for obj in self.collman.objs_colliding(self.ball):
+                self.remove(obj)
+
+
+
         else :
             self.pause_scheduler()
             self.message = MessageLayer()
