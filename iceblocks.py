@@ -1,11 +1,10 @@
 #!/bin/env python3
 
-import time
 import cocos
 import pyglet
 from peddle import Peddle
 from ball import Ball
-from consts import config, WINDOW_W, WINDOW_H, LIVES
+from consts import config, WINDOW_W, WINDOW_H, LIVES, BG_COLOR
 from icefactory import BlockFactory
 from cocos import collision_model as cm
 from block import Block
@@ -21,7 +20,7 @@ class IceBlocks(cocos.layer.ColorLayer):
     keys_pressed = {}
 
     def __init__(self):
-        super(IceBlocks, self).__init__(64, 64, 224, 255)
+        super(IceBlocks, self).__init__(*BG_COLOR, a=255)
         self.keys_pressed = []
         self.current_lives = LIVES
         self.level = BlockFactory().get_level(0)
@@ -32,7 +31,9 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.add(self.peddle, z=1)
         self.add(self.ball, z=1)
         self.draw_blocks()
-        self.collman = cm.CollisionManagerGrid(0, WINDOW_W, 0, WINDOW_H, self.width, self.height)
+        self.collman = cm.CollisionManagerGrid(0, WINDOW_W,
+                                               0, WINDOW_H,
+                                               self.width, self.height)
         self.draw_lives()
 
     def restart_game(self):
@@ -41,7 +42,8 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.level = BlockFactory().get_level(0)
         self.draw_blocks()
         self.draw_lives()
-        self.ball.update_position((self.peddle.position[0]+self.peddle.width/2, self.peddle.height))
+        self.ball.update_position((self.peddle.position[0] +
+                                   self.peddle.width / 2, self.peddle.height))
         self.resume_scheduler()
 
     def blocks_remaining(self):
@@ -54,7 +56,9 @@ class IceBlocks(cocos.layer.ColorLayer):
     def level_up(self):
         self.level = BlockFactory().get_level(self.level.level + 1)
         self.draw_blocks()
-        self.ball.update_position((self.peddle.position[0]+self.peddle.width/2, self.peddle.height))
+        self.ball.update_position((self.peddle.position[0]
+                                   + self.peddle.width
+                                   / 2, self.peddle.height))
         self.resume_scheduler()
 
     def update(self, dt):
@@ -87,7 +91,8 @@ class IceBlocks(cocos.layer.ColorLayer):
             if self.blocks_remaining() == 0:
                 self.pause_scheduler()
                 self.message = MessageLayer()
-                self.message.show_message('Level '+str(self.level.level + 2), self.level_up)
+                self.message.show_message('Level ' + str(self.level.level
+                                                         + 2), self.level_up)
                 self.add(self.message)
         else:
             self.pause_scheduler()

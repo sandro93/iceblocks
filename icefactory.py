@@ -54,8 +54,6 @@ class BlockFactory:
         blockNums = self.levels[n]
         i = 1
         for m in blockNums:
-            print(type(m))
-            print(type(3))
             if type(m) == type(1):
                 startpos = ((WINDOW_W - m * blockw) / 2, WINDOW_H - i * voffset)
                 rows.append(Row(m, startpos, blockw))
