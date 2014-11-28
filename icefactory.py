@@ -10,8 +10,23 @@ def flatten(listOfLists):
 
 class Row:
     def __init__(self, numblocks, startpos, blockw):
+        """
+        There are two kinds of rows:
+            * one with no gaps
+            * and rows with arbitrary empty spaces in place of blocks
+        """
         x, y = startpos
-        positions = [(x + i * blockw, y) for i in range(numblocks)]
+        positions = []
+        if type(numblocks) == type(int):
+            # We are producing a simple row, with no gaps
+            positions = [(x + i * blockw, y) for i in range(numblocks)]
+        else:
+            # we were given a tuple of zeros and ones. zero means no block
+            i = 0
+            for b in numblocks:
+                if b == 1:
+                    positions.append((x + i * blockw, y))
+                i += 1
         self.blocks = [Block(*p) for p in positions]
 
 
@@ -24,10 +39,11 @@ class Level:
 
 class BlockFactory:
     def __init__(self):
-        self.levels = ((10, 9, 8, 7, 6), (10, 9, 8, 9, 10),
-                       (6, 7, 8, 9, 10), (8, 9, 10, 9, 8), (9, 5, 7, 8, 6))       
+        # self.levels = ((10, 9, 8, 7, 6), (10, 9, 8, 9, 10),
+        #              (6, 7, 8, 9, 10), (8, 9, 10, 9, 8), (9, 5, 7, 8, 6))
+        self.levels = (((1, 0, 0, 1), (1, 1, 1, 1)), ((1, 1, 1), (1, 0, 1)))
 
-    def get_level(self, n):       
+    def get_level(self, n):
         if n >= len(self.levels):
             raise Exception('No More Levels!')
         block = Block(1, 1)
@@ -38,7 +54,13 @@ class BlockFactory:
         blockNums = self.levels[n]
         i = 1
         for m in blockNums:
-            startpos = ((WINDOW_W - m * blockw) / 2, WINDOW_H - i * voffset)
-            rows.append(Row(m, startpos, blockw))
-            i += 1
+            if type(m) == type(int):
+                startpos = ((WINDOW_W - m * blockw) / 2, WINDOW_H - i * voffset)
+                rows.append(Row(m, startpos, blockw))
+                i += 1
+            else:
+                startpos = ((WINDOW_W - len(m) * blockw) / 2, WINDOW_H - i * voffset)
+                rows.append(Row(m, startpos, blockw))
+                i += 1
+
         return Level(rows, n)
