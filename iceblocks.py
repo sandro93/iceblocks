@@ -69,12 +69,18 @@ class IceBlocks(cocos.layer.ColorLayer):
                 if isinstance(node, Block):
                     self.collman.add(node)
             for obj in self.collman.objs_colliding(self.ball):
+                time.sleep(2)
                 ball_rcornerx = self.ball.position[0] + self.ball.width
                 ball_lcornerx = self.ball.position[0]
                 block_lcornerx = obj.position[0]
                 block_rcornerx = obj.position[0] + obj.width
-                if ball_rcornerx < block_lcornerx or ball_lcornerx > block_rcornerx:
-                    self.ball.dx = self.ball.dx * -1
+                if ball_rcornerx <= block_lcornerx or ball_lcornerx >= block_rcornerx:
+                    if ball_rcornerx == block_lcornerx or ball_lcornerx == block_rcornerx:
+                        self.ball.dx = self.ball.dx * -1
+                        self.ball.dy = self.ball.dy * -1
+                    else:
+                        self.ball.dx = self.ball.dx * -1
+
                 else:
                     self.ball.dy = self.ball.dy * -1
                 self.remove(obj)
@@ -117,7 +123,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         modifiers are active at the time of the press (ctrl, shift, capslock,
         etc.)
         """
-        
+
         if key in (pyglet.window.key.LEFT, pyglet.window.key.RIGHT):
             self.keys_pressed.append(key)
 
