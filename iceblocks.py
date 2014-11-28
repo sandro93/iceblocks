@@ -3,12 +3,14 @@
 import time
 import cocos
 import pyglet
+import math
 from peddle import Peddle
 from ball import Ball
 from consts import config, WINDOW_W, WINDOW_H, LIVES
 from icefactory import BlockFactory
 from cocos import collision_model as cm
 from block import Block
+
 
 from message import MessageLayer
 # world to view scales
@@ -24,7 +26,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         super(IceBlocks, self).__init__(64, 64, 224, 255)
         self.keys_pressed = []
         self.current_lives = LIVES
-        self.level = BlockFactory().get_level(0)
+        self.level = BlockFactory().get_level(0)        
         self.schedule(self.update)
 
         self.peddle = Peddle()
@@ -42,7 +44,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.draw_blocks()
         self.draw_lives()
         self.ball.update_position((self.peddle.position[0]+self.peddle.width/2, self.peddle.height))
-        self.resume_scheduler()
+        #self.resume_scheduler()
 
     def blocks_remaining(self):
         count = 0
@@ -55,7 +57,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.level = BlockFactory().get_level(self.level.level + 1)
         self.draw_blocks()
         self.ball.update_position((self.peddle.position[0]+self.peddle.width/2, self.peddle.height))
-        self.resume_scheduler()
+        #self.resume_scheduler()
 
     def update(self, dt):
         if self.current_lives > -1:
@@ -63,26 +65,46 @@ class IceBlocks(cocos.layer.ColorLayer):
             result = self.ball.update(self.peddle)
             if result == -1:
                 self.current_lives -= 1
-            self.update_lives()
+                self.update_lives()
+                self.pause_scheduler()
+            
             self.collman.clear()
             for z, node in self.children:
                 if isinstance(node, Block):
                     self.collman.add(node)
             for obj in self.collman.objs_colliding(self.ball):
-                time.sleep(2)
-                ball_rcornerx = self.ball.position[0] + self.ball.width
-                ball_lcornerx = self.ball.position[0]
-                block_lcornerx = obj.position[0]
-                block_rcornerx = obj.position[0] + obj.width
-                if ball_rcornerx <= block_lcornerx or ball_lcornerx >= block_rcornerx:
-                    if ball_rcornerx == block_lcornerx or ball_lcornerx == block_rcornerx:
+                #time.sleep(2)
+                ball_rcornerx = math.ceil(self.ball.position[0] + self.ball.width)
+                ball_rcornery = math.ceil(self.ball.position[1] + self.ball.width)
+                ball_lcornerx = math.ceil(self.ball.position[0])
+                ball_lcornery = math.ceil(self.ball.position[1])
+                block_lcornerx = math.ceil(obj.position[0])
+                block_lcornery = math.ceil(obj.position[1])
+                block_rcornerx = math.ceil(obj.position[0] + obj.width)
+                block_rcornery = math.ceil(obj.position[1] + obj.width)
+                
+##                print('ball r: '+str(ball_rcornerx))
+##                print('ball l: '+str(ball_lcornerx))
+##                print('block r: '+str(block_rcornerx))
+##                print('block l: '+str(block_lcornerx))
+##                print(str(20*'-'))
+
+                if ball_rcornerx <= block_lcornerx :
+                    if ball_rcornerx == block_lcornerx and (block_lcornery == (ball_rcornery+self.ball.height) or (block_lcornery+obj.height) == ball_rcornery):
                         self.ball.dx = self.ball.dx * -1
                         self.ball.dy = self.ball.dy * -1
-                    else:
+                    else :
                         self.ball.dx = self.ball.dx * -1
+                elif ball_lcornerx >= block_rcornerx :
+                    if ball_lcornerx == block_rcornerx and (block_rcornery == (ball_lcornery+self.ball.height) or (block_rcornery+obj.height) == ball_lcornery) :
+                        self.ball.dx = self.ball.dx * -1
+                        self.ball.dy = self.ball.dy * -1
+                    else :
+                        self.ball.dx = self.ball.dx * -1
+                else :
+                    self.ball.dy = self.ball.dy * -1                
 
-                else:
-                    self.ball.dy = self.ball.dy * -1
+                    
                 self.remove(obj)
                 break
             if self.blocks_remaining() == 0:
@@ -123,6 +145,16 @@ class IceBlocks(cocos.layer.ColorLayer):
         modifiers are active at the time of the press (ctrl, shift, capslock,
         etc.)
         """
+
+        if key == pyglet.window.key.P:
+            self.pause_scheduler()
+
+        if key == pyglet.window.key.SPACE:
+            if self.is_running:                
+                self.resume_scheduler()
+            else:                
+                self.schedule(self.update)
+            
 
         if key in (pyglet.window.key.LEFT, pyglet.window.key.RIGHT):
             self.keys_pressed.append(key)
