@@ -34,7 +34,7 @@ class Ball(cocos.sprite.Sprite):
             self.dx = -1 * self.dx
         if y + self.height >= WINDOW_H:
             self.dy = -1 * self.dy
-        if y == peddle.height:
+        if y <= peddle.height:
             if (math.ceil(x) >= peddle_x and math.ceil(x) <= (peddle_x + peddle.width)) or (x + self.width >= peddle_x and x <= (peddle_x + peddle.width)):
                 self.dy = -1 * self.dy
                 self.dx = (center_x - (peddle.position[0] + peddle.width/2)) / 7
