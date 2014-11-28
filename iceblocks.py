@@ -28,9 +28,7 @@ class IceBlocks(cocos.layer.ColorLayer):
 
         self.peddle = Peddle()
         self.ball = Ball()
-        self.blocks = BlockFactory().level0.blocks
-        for block in self.blocks:
-            self.add(block, z=1)
+        self.draw_blocks()
         self.add(self.peddle, z=1)
         self.add(self.ball, z=1)
         self.collman = cm.CollisionManagerBruteForce()
@@ -39,6 +37,7 @@ class IceBlocks(cocos.layer.ColorLayer):
     def restart_game(self):
         self.remove(self.message)
         self.current_lives = LIVES
+        self.draw_blocks()
         self.draw_lives()
         self.resume_scheduler()
 
@@ -67,6 +66,14 @@ class IceBlocks(cocos.layer.ColorLayer):
             self.remove(self.lives[self.current_lives])
             self.lives.remove(self.lives[self.current_lives])
 
+    def draw_blocks(self):
+        for z, node in self.children:
+            if isinstance(node, Block):
+                self.remove(node)
+        self.blocks = BlockFactory().level0.blocks
+        for block in self.blocks:
+            self.add(block, z=1)
+    
     def draw_lives(self):
         self.lives = []
         for i in range(1, self.current_lives + 1):
