@@ -69,7 +69,6 @@ class IceBlocks(cocos.layer.ColorLayer):
                 if isinstance(node, Block):
                     self.collman.add(node)
             for obj in self.collman.objs_colliding(self.ball):
-                time.sleep(2)
                 ball_rcornerx = self.ball.position[0] + self.ball.width
                 ball_lcornerx = self.ball.position[0]
                 block_lcornerx = obj.position[0]

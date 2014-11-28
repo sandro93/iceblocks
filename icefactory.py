@@ -17,7 +17,7 @@ class Row:
         """
         x, y = startpos
         positions = []
-        if type(numblocks) == type(int):
+        if type(numblocks) == type(1):
             # We are producing a simple row, with no gaps
             positions = [(x + i * blockw, y) for i in range(numblocks)]
         else:
@@ -39,9 +39,9 @@ class Level:
 
 class BlockFactory:
     def __init__(self):
-        # self.levels = ((10, 9, 8, 7, 6), (10, 9, 8, 9, 10),
-        #              (6, 7, 8, 9, 10), (8, 9, 10, 9, 8), (9, 5, 7, 8, 6))
-        self.levels = (((1, 0, 0, 1), (1, 1, 1, 1)), ((1, 1, 1), (1, 0, 1)))
+        self.levels = ((10, 9, 8, 7, 6), (10, 9, 8, 9, 10),
+                      (6, 7, 8, 9, 10), (8, 9, 10, 9, 8), (9, 5, 7, 8, 6))
+        # self.levels = (((1, 0, 0, 1), (1, 1, 1, 1)), ((1, 1, 1), (1, 0, 1)))
 
     def get_level(self, n):
         if n >= len(self.levels):
@@ -54,7 +54,9 @@ class BlockFactory:
         blockNums = self.levels[n]
         i = 1
         for m in blockNums:
-            if type(m) == type(int):
+            print(type(m))
+            print(type(3))
+            if type(m) == type(1):
                 startpos = ((WINDOW_W - m * blockw) / 2, WINDOW_H - i * voffset)
                 rows.append(Row(m, startpos, blockw))
                 i += 1
