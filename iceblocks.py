@@ -51,9 +51,8 @@ class IceBlocks(cocos.layer.ColorLayer):
             self.update_lives()
             self.collman.clear()
             for z, node in self.children:
-                if isinstance(node, Ball) or isinstance(node, Block):
+                if isinstance(node, Block):
                     self.collman.add(node)
-            self.collman.add(self.ball)
             for obj in self.collman.objs_colliding(self.ball):
                 self.remove(obj)
         else:
