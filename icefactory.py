@@ -24,19 +24,21 @@ class Level:
 
 class BlockFactory:
     def __init__(self):
-        self.levels = ((10, 9, 8, 9, 10), (10, 9, 8, 9, 10),
-                       (10, 9, 8, 9, 10), (10, 9, 8, 9, 10), (10, 9, 8, 9, 10))
+        self.levels = ((10, 9, 8, 7, 6), (10, 9, 8, 9, 10),
+                       (6, 7, 8, 9, 10), (8, 9, 10, 9, 8), (9, 5, 7, 8, 6))       
 
-    def get_level(self, n):
+    def get_level(self, n):       
+        if n >= len(self.levels):
+            raise Exception('No More Levels!')
         block = Block(1, 1)
         blockw = block.width
         voffset = 40
 
         rows = []
-        blockNums = (10, 9, 8, 9, 10)
+        blockNums = self.levels[n]
         i = 1
-        for n in blockNums:
-            startpos = ((WINDOW_W - n * blockw) / 2, WINDOW_H - i * voffset)
-            rows.append(Row(n, startpos, blockw))
+        for m in blockNums:
+            startpos = ((WINDOW_W - m * blockw) / 2, WINDOW_H - i * voffset)
+            rows.append(Row(m, startpos, blockw))
             i += 1
         return Level(rows, n)

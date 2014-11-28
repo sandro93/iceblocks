@@ -43,8 +43,16 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.draw_lives()
         self.resume_scheduler()
 
-    def level_up(self):
-        self.level = BlockFactory().get_level(self.level.level+1)
+    def blocks_remaining(self):
+        count = 0
+        for z, node in self.children:
+            if isinstance(node, Block):
+                count += 1
+        return count
+
+    def level_up(self):              
+        self.level = BlockFactory().get_level(self.level.level + 1)
+        self.draw_blocks()
 
     def update(self, dt):
         if self.current_lives > -1:
@@ -56,11 +64,12 @@ class IceBlocks(cocos.layer.ColorLayer):
             self.collman.clear()
             for z, node in self.children:
                 if isinstance(node, Block):
-                    self.collman.add(node)
+                    self.collman.add(node)            
             for obj in self.collman.objs_colliding(self.ball):
                 self.remove(obj)
-            else:
+            if self.blocks_remaining() == 0:
                 self.level_up()
+                
         else:
             self.pause_scheduler()
             self.message = MessageLayer()
@@ -75,9 +84,8 @@ class IceBlocks(cocos.layer.ColorLayer):
     def draw_blocks(self):
         for z, node in self.children:
             if isinstance(node, Block):
-                self.remove(node)
-        self.blocks = self.level.blocks
-        for block in self.blocks:
+                self.remove(node)        
+        for block in self.level.blocks:
             self.add(block, z=1)
 
     def draw_lives(self):
