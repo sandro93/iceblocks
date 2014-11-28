@@ -23,15 +23,19 @@ class Level:
 
 class BlockFactory:
     def __init__(self):
+        self.levels = ((10, 9, 8, 9, 10), (10, 9, 8, 9, 10),
+                       (10, 9, 8, 9, 10), (10, 9, 8, 9, 10), (10, 9, 8, 9, 10))
+
+    def get_level(self, n):
         block = Block(1, 1)
         blockw = block.width
         voffset = 40
 
         rows = []
-        blockNums = (10, 9, 8, 9, 10)
+        blockNums = self.levels[n]
         i = 1
         for n in blockNums:
             startpos = ((WINDOW_W - n * blockw) / 2, WINDOW_H - i * voffset)
             rows.append(Row(n, startpos, blockw))
             i += 1
-        self.level0 = Level(rows)
+        return Level(rows)
