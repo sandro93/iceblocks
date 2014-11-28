@@ -31,7 +31,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.add(self.peddle, z=1)
         self.add(self.ball, z=1)
         self.draw_blocks()
-        self.collman = cm.CollisionManagerBruteForce()
+        self.collman = cm.CollisionManagerGrid(0, WINDOW_W, 0, WINDOW_H, self.width, self.height)
         self.draw_lives()
 
     def restart_game(self):
@@ -64,8 +64,12 @@ class IceBlocks(cocos.layer.ColorLayer):
                 if isinstance(node, Block):
                     self.collman.add(node)
             for obj in self.collman.objs_colliding(self.ball):
-                self.ball.dy = self.ball.dy * -1
+                if self.ball.cshape.center[0] < obj.position[0] or self.ball.cshape.center[0] > obj.position[0]:
+                    self.ball.dy = self.ball.dy * -1
+                else:
+                    self.ball.dx = self.ball.dx * -1
                 self.remove(obj)
+                break
             if self.blocks_remaining() == 0:
                 self.level_up()
         else:
@@ -90,7 +94,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.lives = []
         for i in range(1, self.current_lives + 1):
             live = cocos.sprite.Sprite('heart.png')
-            live.position = 20*i, WINDOW_H - 10
+            live.position = 20 * i, WINDOW_H - 10
             self.lives.append(live)
             self.add(live, z=2)
 
