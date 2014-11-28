@@ -37,6 +37,7 @@ class IceBlocks(cocos.layer.ColorLayer):
     def restart_game(self):
         self.remove(self.message)
         self.current_lives = LIVES
+        self.level = BlockFactory().get_level(0)
         self.draw_blocks()
         self.draw_lives()
         self.resume_scheduler()
