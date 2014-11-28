@@ -9,7 +9,7 @@ class Block(cocos.sprite.Sprite):
         super(Block, self).__init__(img, anchor=(0, 0))
         self.position = x, y
         self.cshape = cm.AARectShape(
-            eu.Vector2(x, y),
+            eu.Vector2(x+self.width/2, y+self.height/2),
             self.width / 2,
             self.height / 2
         )
