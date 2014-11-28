@@ -41,6 +41,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.level = BlockFactory().get_level(0)
         self.draw_blocks()
         self.draw_lives()
+        self.ball.update_position((self.peddle.position[0]+self.peddle.width/2, self.peddle.height))
         self.resume_scheduler()
 
     def blocks_remaining(self):
@@ -53,6 +54,8 @@ class IceBlocks(cocos.layer.ColorLayer):
     def level_up(self):
         self.level = BlockFactory().get_level(self.level.level + 1)
         self.draw_blocks()
+        self.ball.update_position((self.peddle.position[0]+self.peddle.width/2, self.peddle.height))
+        self.resume_scheduler()
 
     def update(self, dt):
         if self.current_lives > -1:
@@ -77,7 +80,10 @@ class IceBlocks(cocos.layer.ColorLayer):
                 self.remove(obj)
                 break
             if self.blocks_remaining() == 0:
-                self.level_up()
+                self.pause_scheduler()
+                self.message = MessageLayer()
+                self.message.show_message('Level '+str(self.level.level + 2), self.level_up)
+                self.add(self.message)
         else:
             self.pause_scheduler()
             self.message = MessageLayer()
@@ -111,7 +117,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         modifiers are active at the time of the press (ctrl, shift, capslock,
         etc.)
         """
-
+        
         if key in (pyglet.window.key.LEFT, pyglet.window.key.RIGHT):
             self.keys_pressed.append(key)
 
