@@ -8,6 +8,10 @@ class Block(cocos.sprite.Sprite):
     def __init__(self, x, y, img='block.png'):
         super(Block, self).__init__(img, anchor=(0, 0))
         self.position = x, y
-        self.cshape = cm.AARectShape(eu.Vector2(x, y), self.width / 2, self.height / 2)
+        self.cshape = cm.AARectShape(
+            eu.Vector2(x, y),
+            self.width / 2,
+            self.height / 2
+        )
         pprint.pprint(self.position)
         pprint.pprint(self.cshape.center)
