@@ -16,9 +16,10 @@ class Row:
 
 
 class Level:
-    def __init__(self, rows):
+    def __init__(self, rows, level):
         nestedBlocks = [row.blocks for row in rows]
         self.blocks = flatten(nestedBlocks)
+        self.level = level
 
 
 class BlockFactory:
@@ -32,10 +33,10 @@ class BlockFactory:
         voffset = 40
 
         rows = []
-        blockNums = self.levels[n]
+        blockNums = (10, 9, 8, 9, 10)
         i = 1
         for n in blockNums:
             startpos = ((WINDOW_W - n * blockw) / 2, WINDOW_H - i * voffset)
             rows.append(Row(n, startpos, blockw))
             i += 1
-        return Level(rows)
+        return Level(rows, n)
