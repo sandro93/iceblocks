@@ -5,16 +5,14 @@ import pyglet
 from peddle import Peddle
 from ball import Ball
 from consts import config, WINDOW_W, WINDOW_H, LIVES
-from icefactory import BlockFactory, Level
+from icefactory import BlockFactory
 from cocos import collision_model as cm
-from actions import Blink
 from block import Block
 
 from message import MessageLayer
 # world to view scales
 scale_x = WINDOW_W / config.getint("world", "width")
 scale_y = WINDOW_H / config.getint("world", "height")
-
 
 
 class IceBlocks(cocos.layer.ColorLayer):
@@ -50,7 +48,7 @@ class IceBlocks(cocos.layer.ColorLayer):
                 count += 1
         return count
 
-    def level_up(self):              
+    def level_up(self):
         self.level = BlockFactory().get_level(self.level.level + 1)
         self.draw_blocks()
 
@@ -64,12 +62,12 @@ class IceBlocks(cocos.layer.ColorLayer):
             self.collman.clear()
             for z, node in self.children:
                 if isinstance(node, Block):
-                    self.collman.add(node)            
+                    self.collman.add(node)
             for obj in self.collman.objs_colliding(self.ball):
+                self.ball.dy = self.ball.dy * -1
                 self.remove(obj)
             if self.blocks_remaining() == 0:
                 self.level_up()
-                
         else:
             self.pause_scheduler()
             self.message = MessageLayer()
@@ -84,7 +82,7 @@ class IceBlocks(cocos.layer.ColorLayer):
     def draw_blocks(self):
         for z, node in self.children:
             if isinstance(node, Block):
-                self.remove(node)        
+                self.remove(node)
         for block in self.level.blocks:
             self.add(block, z=1)
 

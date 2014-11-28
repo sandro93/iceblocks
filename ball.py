@@ -22,6 +22,7 @@ class Ball(cocos.sprite.Sprite):
         self.dx = self.dy = BALL_SPEED
         self.cshape = cm.AARectShape(eu.Vector2(x, y), self.width / 2, self.height / 2)
 
+
     def update(self, peddle):
         x, y = self.cshape.center[0], self.cshape.center[1]
         result = 0
