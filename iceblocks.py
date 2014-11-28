@@ -8,6 +8,7 @@ from consts import config, WINDOW_W, WINDOW_H, LIVES
 from icefactory import BlockFactory
 from cocos import collision_model as cm
 from actions import Blink
+from block import Block
 
 from message import MessageLayer
 # world to view scales
@@ -45,25 +46,21 @@ class IceBlocks(cocos.layer.ColorLayer):
         if self.current_lives > -1:
             self.peddle.update(self.keys_pressed)
             result = self.ball.update(self.peddle)
-            if result == -1 :
+            if result == -1:
                 self.current_lives -= 1
             self.update_lives()
             self.collman.clear()
             for z, node in self.children:
-                if not isinstance(node, Peddle):
+                if isinstance(node, Ball) or isinstance(node, Block):
                     self.collman.add(node)
             self.collman.add(self.ball)
             for obj in self.collman.objs_colliding(self.ball):
                 self.remove(obj)
-
-
-
-        else :
+        else:
             self.pause_scheduler()
             self.message = MessageLayer()
             self.message.show_message('Game Over!', self.restart_game)
             self.add(self.message)
-
 
     def update_lives(self):
         if self.current_lives >= 0 and len(self.lives) > self.current_lives:
