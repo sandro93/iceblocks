@@ -1,4 +1,6 @@
 import cocos
+from consts import *
+from cocos.actions import *
 
 class MessageLayer( cocos.layer.Layer ):
     """Transitory messages over worldview
@@ -7,9 +9,9 @@ class MessageLayer( cocos.layer.Layer ):
     optional callback after hiding the message.
     """
 
-    def show_message( self, msg, callback=None ):
-        w,h = director.get_window_size()
-
+    def show_message( self, msg, callback=None ):        
+        w,h = (WINDOW_W, WINDOW_H)
+        
         self.msg = cocos.text.Label( msg,
             font_size=FONT_SIZE,
             font_name=FONT_NAME,

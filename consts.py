@@ -23,3 +23,4 @@ KEY_RIGHT = config.get('bindings', 'key.RIGHT')
 
 # World
 BALL_SPEED = config.getint('world', 'ballspeed')
+LIVES = config.getint('world', 'live')
