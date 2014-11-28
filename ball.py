@@ -31,7 +31,7 @@ class Ball(cocos.sprite.Sprite):
 
         peddle_x, peddle_y = math.ceil(peddle.position[0]), math.ceil(peddle.height)
 
-        if x + self.width > WINDOW_W or x < 0:
+        if x + self.width >= WINDOW_W or x <= 0:
             self.dx = -1 * self.dx
         if y + self.height >= WINDOW_H:
             self.dy = -1 * self.dy
@@ -51,12 +51,20 @@ class Ball(cocos.sprite.Sprite):
         tmp_dx, tmp_dy = (self.dx, self.dy)
         
         if tmp_dy < 0:
-            if y + tmp_dy < peddle.height:
+            if y - peddle.height < tmp_dy * -1:
                 tmp_dy = (y - peddle.height) * -1
 
         if tmp_dx < 0:
-            if x < tmp_dx:
-                tmp_dx = (x - tmp_dx) *-1
+            if x < tmp_dx * -1:
+                tmp_dx = x * -1
+
+        if tmp_dx > 0:
+            if WINDOW_W - (x + self.width) < tmp_dx:
+                tmp_dx = WINDOW_W - (x + self.width)
+                
+        if tmp_dy > 0:
+            if WINDOW_H - (tmp_dy + self.height) < tmp_dy:
+                tmp_dy = WINDOW_H - (tmp_dy + self.height)
         
         newPos = x + tmp_dx, y + tmp_dy
         self.update_position(newPos)
