@@ -27,8 +27,8 @@ class MessageLayer( cocos.layer.Layer ):
             cocos.actions.Delay(1) +
             cocos.actions.Accelerate(cocos.actions.MoveBy( (0,-h/2.0), duration=0.5)) +
             cocos.actions.Hide()
-            )
-
+            )        
+        
         if callback:
             actions += cocos.actions.CallFunc( callback )
 

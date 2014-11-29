@@ -3,7 +3,6 @@ from cocos import collision_model as cm
 from cocos import euclid as eu
 from consts import SOUND_BLOCK_BREAK
 import pyglet
-import os
 
 
 class Block(cocos.sprite.Sprite):
@@ -15,8 +14,7 @@ class Block(cocos.sprite.Sprite):
             eu.Vector2(x+self.width/2, y+self.height/2),
             self.width / 2,
             self.height / 2
-        )
-        print(os.getcwd())
+        )        
         self.effect = pyglet.media.load('break.wav')
     def was_hit(self):
         self.lives -= 1
