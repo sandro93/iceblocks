@@ -27,3 +27,7 @@ LIVES = config.getint('world', 'live')
 
 # Palette
 BG_COLOR = eval(config.get('palette', 'bg'))
+
+# Audio
+AUDIO_BACKEND = config.get('audio', 'backend')
+SOUND_BLOCK_BREAK = config.get('audio', 'block_break')

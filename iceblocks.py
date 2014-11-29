@@ -101,8 +101,8 @@ class IceBlocks(cocos.layer.ColorLayer):
                 else :
                     self.ball.dy = self.ball.dy * -1
 
-
-                self.remove(obj)
+                if(obj.was_hit() == 0):
+                    self.remove(obj)
                 break
             if self.blocks_remaining() == 0:
                 self.pause_scheduler()
