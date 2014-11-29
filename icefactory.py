@@ -39,13 +39,13 @@ class Level:
 
 class BlockFactory:
     def __init__(self):
-        #self.levels = ((10, 9, 8, 7, 6), (10, 9, 8, 9, 10),
-                      #(6, 7, 8, 9, 10), (8, 9, 10, 9, 8), (9, 5, 7, 8, 6))
-        self.levels = (((1, 0, 0, 1), (1, 1, 1, 1)), ((1, 1, 1), (1, 0, 1)))
+        self.levels = ((10, 9, 8, 7, 6), (10, 9, 8, 9, 10),
+                      (6, 7, 8, 9, 10), (8, 9, 10, 9, 8), (9, 5, 7, 8, 6))
+        #self.levels = (((1, 0, 0, 1), (1, 1, 1, 1)), ((1, 1, 1), (1, 0, 1)))
 
     def get_level(self, n):
-        if n >= len(self.levels):
-            raise Exception('No More Levels!')
+        if n >= len(self.levels):            
+            raise Exception('No More Levels!', 0)
         block = Block(1, 1)
         blockw = block.width
         voffset = 40

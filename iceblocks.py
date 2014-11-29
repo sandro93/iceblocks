@@ -46,7 +46,7 @@ class IceBlocks(cocos.layer.ColorLayer):
         self.draw_lives()
         self.ball.update_position((self.peddle.position[0] +
                                    self.peddle.width / 2, self.peddle.height))
-        #self.resume_scheduler()
+        self.resume_scheduler()
 
     def blocks_remaining(self):
         count = 0
@@ -55,13 +55,34 @@ class IceBlocks(cocos.layer.ColorLayer):
                 count += 1
         return count
 
-    def level_up(self):
-        self.level = BlockFactory().get_level(self.level.level + 1)
-        self.draw_blocks()
+    def level_up(self):        
+        self.pause_scheduler()
+        
         self.ball.update_position((self.peddle.position[0]
                                    + self.peddle.width
                                    / 2, self.peddle.height))
-        # self.resume_scheduler()
+        
+        try:
+            self.level = BlockFactory().get_level(self.level.level + 1)
+        except Exception as ex:
+            message, code = ex.args
+            if code == 0:
+                self.message = MessageLayer()
+                self.message.show_message(message, self.restart_game)
+                self.add(self.message)
+                return
+
+
+        self.draw_blocks()
+        
+        self.message = MessageLayer()
+        self.message.show_message('Level ' + str(self.level.level
+                                                         + 1), self.resume_scheduler)
+        self.add(self.message)
+        
+        #self.draw_blocks()
+        
+        #self.resume_scheduler()
 
     def update(self, dt):
         if self.current_lives > -1:
@@ -70,7 +91,7 @@ class IceBlocks(cocos.layer.ColorLayer):
             if result == -1:
                 self.current_lives -= 1
                 self.update_lives()
-                self.pause_scheduler()
+                #self.pause_scheduler()
 
             self.collman.clear()
             for z, node in self.children:
@@ -105,11 +126,7 @@ class IceBlocks(cocos.layer.ColorLayer):
                     self.remove(obj)
                 break
             if self.blocks_remaining() == 0:
-                self.pause_scheduler()
-                self.message = MessageLayer()
-                self.message.show_message('Level ' + str(self.level.level
-                                                         + 2), self.level_up)
-                self.add(self.message)
+                self.level_up()
         else:
             self.pause_scheduler()
             self.message = MessageLayer()
@@ -121,12 +138,12 @@ class IceBlocks(cocos.layer.ColorLayer):
             self.remove(self.lives[self.current_lives])
             self.lives.remove(self.lives[self.current_lives])
 
-    def draw_blocks(self):
+    def draw_blocks(self):  
         for z, node in self.children:
-            if isinstance(node, Block):
+            if isinstance(node, Block):                
                 self.remove(node)
         for block in self.level.blocks:
-            self.add(block, z=1)
+            self.add(block, z=1)          
 
     def draw_lives(self):
         self.lives = []
@@ -144,14 +161,14 @@ class IceBlocks(cocos.layer.ColorLayer):
         etc.)
         """
 
-        if key == pyglet.window.key.P:
-            self.pause_scheduler()
-
-        if key == pyglet.window.key.SPACE:
-            if self.is_running:
-                self.resume_scheduler()
-            else:
-                self.schedule(self.update)
+##        if key == pyglet.window.key.P:
+##            self.pause_scheduler()
+##
+##        if key == pyglet.window.key.SPACE:
+##            if self.is_running:
+##                self.resume_scheduler()
+##            else:
+##                self.schedule(self.update)
 
 
         if key in (pyglet.window.key.LEFT, pyglet.window.key.RIGHT):
